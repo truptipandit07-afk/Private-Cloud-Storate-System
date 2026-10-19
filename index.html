@@ -1,0 +1,33 @@
+{% extends "base.html" %}{% block body %}
+<div class="card">
+<form method="post" action="{{ url_for('upload') }}" enctype="multipart/form-data" class="row">
+<input type="hidden" name="csrf" value="{{ csrf }}">
+<input type="file" name="files" multiple required><button>Upload</button></form>
+<p><small>{{ used|size }} of {{ quota|size }} used</small></p>
+<div class="bar"><i style="width:{{ [100, used*100/quota]|min }}%"></i></div></div>
+
+<div class="card">
+<form class="row" style="margin-bottom:10px"><input name="q" value="{{ q }}" placeholder="Search files"><button>Search</button></form>
+<div class="tw"><table>
+<tr><th>Name</th><th>Size</th><th>Uploaded</th><th>Actions</th></tr>
+{% for f in files %}
+<tr><td>{{ f.name }}
+{% for s in shares.get(f.id, []) %}<div><small>🔗 <code>{{ request.host_url }}s/{{ s.token }}</code>
+{% if s.expires %}(exp {{ s.expires[:10] }}){% endif %}</small>
+<form method="post" action="{{ url_for('unshare', sid=s.id) }}" style="display:inline">
+<input type="hidden" name="csrf" value="{{ csrf }}"><button class="gray" style="padding:2px 8px">✕</button></form></div>{% endfor %}
+</td><td>{{ f.size|size }}</td><td>{{ f.created }}</td>
+<td><div class="row">
+<a class="btn" href="{{ url_for('download', fid=f.id) }}">Download</a>
+<form method="post" action="{{ url_for('share', fid=f.id) }}" class="row">
+<input type="hidden" name="csrf" value="{{ csrf }}">
+<select name="days"><option value="1">1d</option><option value="7" selected>7d</option><option value="30">30d</option><option value="0">Never</option></select>
+<button>Share</button></form>
+<form method="post" action="{{ url_for('rename', fid=f.id) }}" class="row">
+<input type="hidden" name="csrf" value="{{ csrf }}"><input name="name" placeholder="New name" size="12" required><button class="gray">Rename</button></form>
+<form method="post" action="{{ url_for('delete', fid=f.id) }}" onsubmit="return confirm('Delete?')">
+<input type="hidden" name="csrf" value="{{ csrf }}"><button class="red">Delete</button></form>
+</div></td></tr>
+{% else %}<tr><td colspan="4" class="mut">No files yet.</td></tr>{% endfor %}
+</table></div></div>
+{% endblock %}

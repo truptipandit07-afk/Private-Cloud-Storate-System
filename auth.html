@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% block body %}
+<div class="card" style="max-width:380px;margin:40px auto">
+<h2>{{ 'Create account' if mode=='register' else 'Log in' }}</h2>
+<form method="post" class="row" style="flex-direction:column;align-items:stretch">
+<input type="hidden" name="csrf" value="{{ csrf }}">
+<input name="username" placeholder="Username" required>
+<input name="password" type="password" placeholder="Password (min 8)" required>
+<button>{{ 'Register' if mode=='register' else 'Login' }}</button></form>
+<p><small>{% if mode=='login' %}No account? <a href="{{ url_for('register') }}">Register</a>
+{% else %}Have one? <a href="{{ url_for('login') }}">Log in</a>{% endif %}</small></p></div>
+{% endblock %}

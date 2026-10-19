@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Private Cloud</title>
+<style>
+:root{--bg:#f5f6fa;--card:#fff;--tx:#1d2330;--mut:#6b7385;--ac:#3b6cf6;--bd:#e3e6ee}
+@media(prefers-color-scheme:dark){:root{--bg:#12151c;--card:#1b202b;--tx:#e8ebf2;--mut:#98a1b5;--bd:#2a3140}}
+*{box-sizing:border-box}body{margin:0;font:15px system-ui,sans-serif;background:var(--bg);color:var(--tx)}
+header{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;background:var(--card);border-bottom:1px solid var(--bd)}
+main{max-width:960px;margin:20px auto;padding:0 14px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:16px;margin-bottom:16px}
+input,select,button{font:inherit;padding:7px 10px;border:1px solid var(--bd);border-radius:6px;background:var(--bg);color:var(--tx)}
+button,.btn{background:var(--ac);color:#fff;border:0;cursor:pointer;text-decoration:none;padding:7px 12px;border-radius:6px;display:inline-block}
+button.red{background:#d64545}button.gray{background:var(--mut)}
+table{width:100%;border-collapse:collapse}td,th{padding:8px;border-bottom:1px solid var(--bd);text-align:left;vertical-align:top}
+.row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}form{margin:0}
+.flash{background:#fff3cd;color:#6b5400;padding:10px;border-radius:6px;margin-bottom:12px}
+.bar{height:8px;background:var(--bd);border-radius:4px;overflow:hidden}.bar i{display:block;height:100%;background:var(--ac)}
+small,.mut{color:var(--mut)}code{word-break:break-all}
+.tw{overflow-x:auto}
+</style></head><body>
+<header><b>☁️ Private Cloud</b>
+{% if user %}<form method="post" action="{{ url_for('logout') }}" class="row"><span>{{ user }}</span>
+<input type="hidden" name="csrf" value="{{ csrf }}"><button class="gray">Logout</button></form>{% endif %}</header>
+<main>{% for m in get_flashed_messages() %}<div class="flash">{{ m }}</div>{% endfor %}
+{% block body %}{% endblock %}</main></body></html>
